@@ -1,0 +1,14 @@
+venv/
+.venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+*.db
+*.sqlite3
+instance/
+.env
+.vscode/
+.idea/
+app/static/uploads/*
+!app/static/uploads/padrao.png

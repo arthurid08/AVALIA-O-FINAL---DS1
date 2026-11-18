@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <!-- Formulário de Cadastro -->
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">Cadastrar Produto</div>
+            <div class="card-body">
+                <form action="{{ url_for('main.index') }}" method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label">Nome do Produto</label>
+                        <input type="text" name="nome" class="form-control" placeholder="Nome do produto" required minlength="3">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Preço (R$)</label>
+                        <input type="number" step="0.01" name="preco" class="form-control" placeholder="Preço" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Categoria</label>
+                        <select name="categoria_id" class="form-select" required>
+                            <option value="" selected disabled>Selecione...</option>
+                            {% for cat in categorias %}
+                                <option value="{{ cat.id }}">{{ cat.nome }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Foto (Opcional)</label>
+                        <input type="file" name="imagem" class="form-control" accept=".png,.jpg,.jpeg,.webp">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Salvar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Listagem e Barra de Busca -->
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>Produtos Cadastrados</span>
+                <form action="{{ url_for('main.index') }}" method="GET" class="d-flex gap-2">
+                    <input type="text" name="busca" class="form-control form-control-sm" placeholder="Pesquisar por nome..." value="{{ busca }}">
+                    <button type="submit" class="btn btn-sm btn-outline-secondary">Buscar</button>
+                    {% if busca %}
+                        <a href="{{ url_for('main.index') }}" class="btn btn-sm btn-outline-danger">Limpar</a>
+                    {% endif %}
+                </form>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Foto</th>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Categoria</th>
+                            <th>Preço</th>
+                            <th class="text-end">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in produtos %}
+                        <tr>
+                            <td>
+                                <img src="{{ url_for('static', filename='uploads/' + p.imagem) }}" 
+                                     alt="{{ p.nome }}" width="50" height="50" class="rounded object-fit-cover">
+                            </td>
+                            <td>{{ p.id }}</td>
+                            <td>{{ p.nome }}</td>
+                            <td><span class="badge bg-secondary">{{ p.categoria.nome }}</span></td>
+                            <td>R$ {{ "%.2f"|format(p.preco)|replace('.', ',') }}</td>
+                            <td class="text-end">
+                                <a href="{{ url_for('main.editar', id=p.id) }}" class="btn btn-sm btn-warning">Editar</a>
+                                <form action="{{ url_for('main.excluir', id=p.id) }}" method="POST" class="d-inline" onsubmit="return confirm('Deseja realmente excluir este produto?');">
+                                    <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="6" class="text-center py-4 text-muted">Nenhum produto encontrado.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}[cite: 14, 15, 16, 17, 18, 19, 20, 21]
