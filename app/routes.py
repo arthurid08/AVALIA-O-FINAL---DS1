@@ -1,7 +1,8 @@
+import os
+import uuid
 from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app
-from flask import Flask
-from app import db      
-from app.models import Produto, Categoria  
+from app import db
+from app.models import Produto, Categoria
 main_bp = Blueprint('main', __name__)
 
 EXTENSOES_PERMITIDAS = {'png', 'jpg', 'jpeg',}
